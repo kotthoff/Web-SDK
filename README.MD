@@ -3,7 +3,7 @@ Webassembly module for local intertial estimation in web browser
 
 -----
 ## What it does
-The sample website webcore.html demonstrates usage of the navisens motionDNA webassembly module to estimate your location in cartestian space using the DeviceMotion web api to capture accelerometer and gyroscope sensor data from  the mobile device that is running the demo.
+The sample website webcore.html demonstrates usage of the navisens motionDNA webassembly module to estimate your location in cartestian space. The DeviceMotion web api is used to capture accelerometer and gyroscope sensor data from the mobile device that is running the demo.
 
 ## Getting Started
 

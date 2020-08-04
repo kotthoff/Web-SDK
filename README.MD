@@ -24,7 +24,11 @@ This will load our inertial model and start process motion data. The call must b
 
 This call will end the estimation and stop processing sensor data.
 
+## Known Issues
+On iOS devices, sensor collection appears to pause during a touch event and during scrolling animataions. While it appears that most sensor events are still capture and delivered to our SDK, since the timestamps are not coupled with the sensor data, the timestamp will appear to be duplicate for all event cached for the duration of the pause. This may affect estimation negatively.
+
 ## Troubleshooting
+
 #### DevieMotion api does not appear to exist.
 Make sure you are serving the site up in a secure HTTPS context.
 

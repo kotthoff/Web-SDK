@@ -10,7 +10,16 @@ The sample website webcore.html demonstrates usage of the navisens motionDNA web
 ### Prerequisites
 The module itself must be run on a device with the DeviceMotion API properly implemented. It has been so far tested on newer Android and iOS phone hardware succussfully but may also work on other devices and browsers.
 
+Tested OS:
+- iOS 13, 12.1+
+- Android 9 w/ Chrome 87
+
 The website requesting the motion data must be served up on a secure site as the API will not be available on standard HTTP.
+
+### Starting up
+Navigate to where you are hosting the secure sample site and press start. On iOS there should be a request for sensor access. On Android it should simply startup. The website may not respond for a few second while the SDK starts up. This is expected behavior.
+
+The Cartesian graph should begin to update with a x,y view of your trajectory relative to your initial location when the SDK started up
 
 ### API Calls
 

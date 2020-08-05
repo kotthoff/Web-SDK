@@ -33,6 +33,22 @@ This will load our inertial model and start process motion data. The call must b
 
 This call will end the estimation and stop processing sensor data.
 
+### Callbacks
+
+3 callback methods must be impemented in the javascript layer in order for the SDK to function properly
+
+`receive(x,y,height,timestamp,motion)`
+
+This is the primary callback and is where the estimation of the users position is passed back to the hmtl and javascript layers. The method also is handed the currently predictedmotion for the user, which is usual one of three possible motions... stationary, fidgeting, and forward.
+
+`reportError(errerCode,errorDescription)`
+
+This method will report some commone errors experiences within the SDK.
+
+`estImu(acc_x,acc_y,acc_z,gyro_roll,gyro_pitch,gyro_yaw,timestamp,delta,maxDelta)`
+
+This method delivers to the javascript layer the raw inertial data that is being captured on the mobile device for the gyroscope and accelerometer. This is just so the raw data used to determine your position is also available.
+
 ## Known Issues
 On iOS devices, sensor collection appears to pause during a touch event and during scrolling animataions. While it appears that most sensor events are still capture and delivered to our SDK, since the timestamps are not coupled with the sensor data, the timestamp will appear to be duplicate for all event cached for the duration of the pause. This may affect estimation negatively.
 

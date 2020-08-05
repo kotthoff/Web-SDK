@@ -1300,11 +1300,11 @@ function updateGlobalBufferAndViews(buf) {
 }
 
 var STATIC_BASE = 1024,
-    STACK_BASE = 34653536,
+    STACK_BASE = 34653584,
     STACKTOP = STACK_BASE,
-    STACK_MAX = 1099104,
-    DYNAMIC_BASE = 34653536,
-    DYNAMICTOP_PTR = 1098912;
+    STACK_MAX = 1099152,
+    DYNAMIC_BASE = 34653584,
+    DYNAMICTOP_PTR = 1098960;
 
 assert(STACK_BASE % 16 === 0, 'stack must start aligned');
 assert(DYNAMIC_BASE % 16 === 0, 'heap must start aligned');
@@ -1860,9 +1860,9 @@ var tempI64;
 // === Body ===
 
 var ASM_CONSTS = {
-  680174: function() {if(document.getElementById('recordData').checked == true) { return 1; } else { return 0; }},  
- 680270: function() {if(document.getElementById('enableEstimation').checked == true){ return 1; }else{ return 0; }},  
- 680409: function($0) {document.getElementById('logFileName').value = UTF8ToString($0)}
+  680188: function() {if(document.getElementById('recordData').checked == true) { return 1; } else { return 0; }},  
+ 680284: function() {if(document.getElementById('enableEstimation').checked == true){ return 1; }else{ return 0; }},  
+ 680423: function($0) {document.getElementById('logFileName').value = UTF8ToString($0)}
 };
 
 function _emscripten_asm_const_iii(code, sigPtr, argbuf) {
@@ -1872,7 +1872,7 @@ function _emscripten_asm_const_iii(code, sigPtr, argbuf) {
 
 
 
-// STATICTOP = STATIC_BASE + 1098080;
+// STATICTOP = STATIC_BASE + 1098128;
 /* global initializers */  __ATINIT__.push({ func: function() { ___wasm_call_ctors() } });
 
 
@@ -2060,7 +2060,7 @@ function _emscripten_asm_const_iii(code, sigPtr, argbuf) {
   
       var pointer = ___cxa_is_pointer_type(throwntype);
       // can_catch receives a **, add indirection
-      var buffer = 1099072;
+      var buffer = 1099120;
       HEAP32[((buffer)>>2)]=thrown;
       thrown = buffer;
       // The different catch blocks are denoted by different types.
@@ -2097,7 +2097,7 @@ function _emscripten_asm_const_iii(code, sigPtr, argbuf) {
   
       var pointer = ___cxa_is_pointer_type(throwntype);
       // can_catch receives a **, add indirection
-      var buffer = 1099072;
+      var buffer = 1099120;
       HEAP32[((buffer)>>2)]=thrown;
       thrown = buffer;
       // The different catch blocks are denoted by different types.
@@ -5848,7 +5848,7 @@ function _emscripten_asm_const_iii(code, sigPtr, argbuf) {
 
 
   function _emscripten_get_sbrk_ptr() {
-      return 1098912;
+      return 1098960;
     }
 
   function _emscripten_is_main_browser_thread() {
@@ -6423,7 +6423,7 @@ function _emscripten_asm_const_iii(code, sigPtr, argbuf) {
   }
   
   
-  var _fetch_work_queue=1099088;function __emscripten_get_fetch_work_queue() {
+  var _fetch_work_queue=1099136;function __emscripten_get_fetch_work_queue() {
       return _fetch_work_queue;
     }function _emscripten_start_fetch(fetch, successcb, errorcb, progresscb, readystatechangecb) {
     if (typeof noExitRuntime !== 'undefined') noExitRuntime = true; // If we are the main Emscripten runtime, we should not be closing down.
@@ -6641,10 +6641,10 @@ function _emscripten_asm_const_iii(code, sigPtr, argbuf) {
     }
 
   
-  var ___tm_current=1098928;
+  var ___tm_current=1098976;
   
   
-  var ___tm_timezone=(stringToUTF8("GMT", 1098976, 4), 1098976);
+  var ___tm_timezone=(stringToUTF8("GMT", 1099024, 4), 1099024);
   
   function _tzset() {
       // TODO: Use (malleable) environment variables instead of system settings.

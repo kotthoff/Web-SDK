@@ -14,26 +14,26 @@
             margin-right: auto;
             display: block;
         }
-        
+
         textarea.emscripten {
             font-family: monospace;
             width: 80%;
         }
-        
+
         div.emscripten {
             text-align: center;
         }
-        
+
         div.emscripten_border {
             border: 1px solid black;
         }
         /* the canvas *must not* have any border or padding, or mouse coords will be wrong */
-        
+
         canvas.emscripten {
             border: 0px none;
             background-color: black;
         }
-        
+
         .spinner {
             height: 50px;
             width: 50px;
@@ -49,7 +49,7 @@
             border-radius: 100%;
             background-color: rgb(255, 255, 255);
         }
-        
+
         @-webkit-keyframes rotation {
             from {
                 -webkit-transform: rotate(0deg);
@@ -58,7 +58,7 @@
                 -webkit-transform: rotate(360deg);
             }
         }
-        
+
         @-moz-keyframes rotation {
             from {
                 -moz-transform: rotate(0deg);
@@ -67,7 +67,7 @@
                 -moz-transform: rotate(360deg);
             }
         }
-        
+
         @-o-keyframes rotation {
             from {
                 -o-transform: rotate(0deg);
@@ -76,7 +76,7 @@
                 -o-transform: rotate(360deg);
             }
         }
-        
+
         @keyframes rotation {
             from {
                 transform: rotate(0deg);
@@ -219,9 +219,9 @@
                 .style("fill", "#CC545C")
         }
 
-        function reportError(errCode, errDesc) {
-            if (errCode != 0) {
-                alert(errDesc);
+        function reportStatus(statusCode, description) {
+            if (statusCode != 0) {
+                alert(description);
             }
         }
 
@@ -487,7 +487,7 @@
                 }
             });
         </script>
-        <script async type="text/javascript" src="webcore.js"></script>
+        <script async type="text/javascript" src="https://staging.navisens.com/webcore.js" crossorigin="anonymous"></script>
         <br/>
 
         <div class="container">

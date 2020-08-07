@@ -1,606 +1,550 @@
 <!doctype html>
 <html lang="en-us">
-  <head>
+
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Navisens Web Core Demo</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
     <style>
-      .emscripten { padding-right: 0; margin-left: auto; margin-right: auto; display: block; }
-      textarea.emscripten { font-family: monospace; width: 80%; }
-      div.emscripten { text-align: center; }
-      div.emscripten_border { border: 1px solid black; }
-      /* the canvas *must not* have any border or padding, or mouse coords will be wrong */
-      canvas.emscripten { border: 0px none; background-color: black; }
-
-      .spinner {
-        height: 50px;
-        width: 50px;
-        margin: 0px auto;
-        -webkit-animation: rotation .8s linear infinite;
-        -moz-animation: rotation .8s linear infinite;
-        -o-animation: rotation .8s linear infinite;
-        animation: rotation 0.8s linear infinite;
-        border-left: 10px solid rgb(200,200,200);
-        border-right: 10px solid rgb(200,200,200);
-        border-bottom: 10px solid rgb(200,200,200);
-        border-top: 10px solid rgb(204,84,92);
-        border-radius: 100%;
-        background-color: rgb(255,255,255);
-      }
-      @-webkit-keyframes rotation {
-        from {-webkit-transform: rotate(0deg);}
-        to {-webkit-transform: rotate(360deg);}
-      }
-      @-moz-keyframes rotation {
-        from {-moz-transform: rotate(0deg);}
-        to {-moz-transform: rotate(360deg);}
-      }
-      @-o-keyframes rotation {
-        from {-o-transform: rotate(0deg);}
-        to {-o-transform: rotate(360deg);}
-      }
-      @keyframes rotation {
-        from {transform: rotate(0deg);}
-        to {transform: rotate(360deg);}
-      }
-
+        .emscripten {
+            padding-right: 0;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+        }
+        
+        textarea.emscripten {
+            font-family: monospace;
+            width: 80%;
+        }
+        
+        div.emscripten {
+            text-align: center;
+        }
+        
+        div.emscripten_border {
+            border: 1px solid black;
+        }
+        /* the canvas *must not* have any border or padding, or mouse coords will be wrong */
+        
+        canvas.emscripten {
+            border: 0px none;
+            background-color: black;
+        }
+        
+        .spinner {
+            height: 50px;
+            width: 50px;
+            margin: 0px auto;
+            -webkit-animation: rotation .8s linear infinite;
+            -moz-animation: rotation .8s linear infinite;
+            -o-animation: rotation .8s linear infinite;
+            animation: rotation 0.8s linear infinite;
+            border-left: 10px solid rgb(200, 200, 200);
+            border-right: 10px solid rgb(200, 200, 200);
+            border-bottom: 10px solid rgb(200, 200, 200);
+            border-top: 10px solid rgb(204, 84, 92);
+            border-radius: 100%;
+            background-color: rgb(255, 255, 255);
+        }
+        
+        @-webkit-keyframes rotation {
+            from {
+                -webkit-transform: rotate(0deg);
+            }
+            to {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+        
+        @-moz-keyframes rotation {
+            from {
+                -moz-transform: rotate(0deg);
+            }
+            to {
+                -moz-transform: rotate(360deg);
+            }
+        }
+        
+        @-o-keyframes rotation {
+            from {
+                -o-transform: rotate(0deg);
+            }
+            to {
+                -o-transform: rotate(360deg);
+            }
+        }
+        
+        @keyframes rotation {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
     </style>
-  </head>
-  <body>
+</head>
+
+<body>
     <hr/>
-    <figure style="overflow:visible;" id="spinner"><div class="spinner"></div><center style="margin-top:0.5em"><strong>Navisens Web Core</strong></center></figure>
+    <figure style="overflow:visible;" id="spinner">
+        <div class="spinner"></div>
+        <center style="margin-top:0.5em"><strong>Navisens Web Core</strong></center>
+    </figure>
     <div class="emscripten" id="status">Downloading Core Module...</div>
     <div class="emscripten">
-      <progress value="0" max="100" id="progress" hidden=1></progress>
+        <progress value="0" max="100" id="progress" hidden=1></progress>
     </div>
     <div class="emscripten_border">
-      <canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()"></canvas>
+        <canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()"></canvas>
     </div>
     <!-- Load d3.js -->
-<script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://d3js.org/d3.v4.js"></script>
 
-<!-- Create a div where the graph will take place -->
-<div id="cartesian"></div>
-
-    <!-- <hr/> -->
-    <!-- <div class="emscripten">
-      <input type="checkbox" id="resize">Resize canvas
-      <input type="checkbox" id="pointerLock" checked>Lock/hide mouse pointer
-      &nbsp;&nbsp;&nbsp;
-      <input type="button" value="Fullscreen" onclick="Module.requestFullscreen(document.getElementById('pointerLock').checked,
-                                                                                document.getElementById('resize').checked)">
-    </div> -->
-
-    <!-- <hr/> -->
+    <!-- div where the graph will take place -->
+    <div id="cartesian"></div>
     <textarea class="emscripten" id="output" rows="8"></textarea>
 
     <hr>
     <script type='text/javascript'>
-      var statusElement = document.getElementById('status');
-      var progressElement = document.getElementById('progress');
-      var spinnerElement = document.getElementById('spinner');
+        var statusElement = document.getElementById('status');
+        var progressElement = document.getElementById('progress');
+        var spinnerElement = document.getElementById('spinner');
 
-      function testCall(i,str) {
-        console.log("TEST CALL: " + i + "  " + str);
-      }
+        function testCall(i, str) {
+            console.log("TEST CALL: " + i + "  " + str);
+        }
 
 
-      var navisensCoreIsReady = false;
+        var navisensCoreIsReady = false;
 
-    // set the dimensions and margins of the graph
-    var margin = {top: 10, right: 30, bottom: 30, left: 60},
-        width = document.body.clientWidth - margin.left - margin.right,
-        height = document.body.clientWidth - margin.top - margin.bottom;
+        // set the dimensions and margins of the graph
+        var margin = {
+                top: 10,
+                right: 30,
+                bottom: 30,
+                left: 60
+            },
+            width = document.body.clientWidth - margin.left - margin.right,
+            height = document.body.clientWidth - margin.top - margin.bottom;
         console.log("cart width: " + width)
         console.log("cart height: " + height)
-    var data = [];
+        var data = [];
 
         // append the svg object to the body of the page
         var svg = d3.select("#cartesian")
-          .append("svg")
+            .append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
-          .append("g")
+            .append("g")
             .attr("transform",
-                  "translate(" + margin.left + "," + margin.top + ")");
-
-        // var data = [{"x_axis":1,"y_axis":2},{"x_axis":2,"y_axis":3},{"x_axis":0,"y_axis":1}];
+                "translate(" + margin.left + "," + margin.top + ")");
 
         // Add X axis
         var x_axis = d3.scaleLinear()
-          .domain([0, 10])
-          .range([ 0, width ]);
+            .domain([0, 10])
+            .range([0, width]);
         svg.append("g")
-          .attr("transform", "translate(0," + height + ")")
-          .call(d3.axisBottom(x_axis));
+            .attr("transform", "translate(0," + height + ")")
+            .call(d3.axisBottom(x_axis));
 
         // Add Y axis
         var y_axis = d3.scaleLinear()
-          .domain([0, 10])
-          .range([ height, 0]);
+            .domain([0, 10])
+            .range([height, 0]);
         svg.append("g")
-          .call(d3.axisLeft(y_axis));
+            .call(d3.axisLeft(y_axis));
 
 
-      var padding = 2.0 // percentage of canvas used for padding
-      var canvas_height = document.getElementById("canvas").clientHeight
-      var canvas_width = document.getElementById("canvas").clientWidth
-      console.log("canvas_height: " + canvas_height)
-      console.log("canvas_width: " + canvas_width)
-      var max_x, min_x, max_y, min_y, max_axis, min_axis
+        var padding = 2.0 // percentage of canvas used for padding
+        var canvas_height = document.getElementById("canvas").clientHeight
+        var canvas_width = document.getElementById("canvas").clientWidth
+        console.log("canvas_height: " + canvas_height)
+        console.log("canvas_width: " + canvas_width)
+        var max_x, min_x, max_y, min_y, max_axis, min_axis
 
-      function updateBounds(x,y){
-        if (max_x === undefined || max_x < x) {
-          max_x = x
-        }
-        if (min_x === undefined || min_x > x) {
-          min_x = x
-        }
-        if (max_y === undefined || max_y < y) {
-          max_y = y
-        }
-        if (min_y === undefined || min_y > y) {
-          min_y = y
-        }
-        max_axis = max_x > max_y ? max_x : max_y
-        min_axis = min_x < min_y ? min_x : min_y
-      }
-
-      function updateCartesian(data_points) {
-        // console.log("data_points: " + data_points.length)
-        svg.selectAll("g").remove();
-
-        // Add X axis
-        var x_axis = d3.scaleLinear()
-          .domain([min_axis,max_axis])
-          .range([ 0, width ]);
-        svg.append("g")
-          .attr("transform", "translate(0," + height + ")")
-          .call(d3.axisBottom(x_axis));
-
-        // Add Y axis
-        var y_axis = d3.scaleLinear()
-          .domain([min_axis,max_axis])
-          .range([ height, 0]);
-        svg.append("g")
-          .call(d3.axisLeft(y_axis));
-
-
-        // Add dots
-        svg.append('g')
-          .selectAll("dot")
-          .data(data_points)
-          .enter()
-          .append("circle")
-            .attr("cx", function (d) { return x_axis(d.x_axis); } )
-            .attr("cy", function (d) { return y_axis(d.y_axis); } )
-            .attr("r", 1.5)
-            .style("fill", "#CC545C")
-      }
-
-      function reportError(errCode,errDesc){
-        if(errCode != 0){
-          alert(errDesc);
-        }
-      }
-
-      var last_location
-
-      function receive(x,y,h,t,motion){
-
-        document.getElementById("estPosX").innerHTML = x.toFixed(5);
-        document.getElementById("estPosY").innerHTML = y.toFixed(5);
-        document.getElementById("estPosH").innerHTML = h.toFixed(5);
-        document.getElementById("estPosT").innerHTML = t.toFixed(5);
-        document.getElementById("estPosM").innerHTML = motion;
-
-        updateBounds(x,y)
-        var location = new Object();
-        location.x_axis = x;
-        location.y_axis = y;
-
-
-        if (last_location != undefined) {
-          var x_diff = Math.abs(x - last_location.x_axis);
-          var y_diff = Math.abs(y - last_location.y_axis);
-          // console.log("x_diff: " + x_diff + " y_diff: " + y_diff)
-          if (y_diff > 0.15 || x_diff > 0.15) {
-            data.push(location)
-            updateCartesian(data)
-            last_location = location
-          }
-        } else {
-          data.push(location)
-          updateCartesian(data)
-          last_location = location
-        }
-
-      }
-
-      function estImu(ax,ay,az,gr,gp,gy,ts,dt,maxDt){
-
-        document.getElementById("accX").innerHTML = ax.toFixed(5);
-        document.getElementById("accY").innerHTML = ay.toFixed(5);
-        document.getElementById("accZ").innerHTML = az.toFixed(5);
-
-        document.getElementById("gyroRoll").innerHTML = gr.toFixed(5);
-        document.getElementById("gyroPitch").innerHTML = gp.toFixed(5);
-        document.getElementById("gyroYaw").innerHTML = gy.toFixed(5);
-
-        document.getElementById("ts").innerHTML = ts.toFixed(5);
-        document.getElementById("dt").innerHTML = dt.toFixed(5);
-        document.getElementById("maxDt").innerHTML = maxDt.toFixed(5);
-      }
-
-      function xhrRequest(opts) {
-        return new Promise(function (resolve, reject) {
-        var xhr = new XMLHttpRequest();
-        xhr.open(opts.method, opts.url);
-        xhr.onload = function () {
-          if (this.status >= 200 && this.status < 300){
-            resolve(xhr.response);
-          } else {
-            reject({
-            status: this.status,
-            statusText: xhr.statusText
-            });
-          }
-        };
-
-        xhr.onerror = function () {
-          reject({
-          status: this.status,
-          statusText: xhr.statusText
-          });
-        };
-
-        if (opts.headers) {
-          Object.keys(opts.headers).forEach(function (key) {
-          xhr.setRequestHeader(key, opts.headers[key]);
-          });
-        }
-
-        var params = opts.params;
-        if (params && typeof params === 'object') {
-            params = Object.keys(params).map(function (key) {
-            return encodeURIComponent(key) + '=' + encodeURIComponent(params[key]);
-            }).join('&');
-        }
-        xhr.send(params);
-        });
-      }
-
-      function verifyDevKey(paramsJson){
-        console.log("Attempting to verify dev key")
-        xhrRequest({
-          method: 'POST',
-          url: 'http://localhost:9445/auth/verify/',
-          params: paramsJson,
-        }).then(function (responseStr) {
-          var resultRunMotionDna = Module['responseVerifyDevKey'](responseStr);
-        }).catch(function (err) {
-          console.error("devKey verification error.", err.statusText);
-          console.log("BUT LETS TRY THIS ANYWAY");
-        });
-      }
-
-      var Module = {
-        preRun: [],
-        postRun: [],
-        onRuntimeInitialized: function(){
-          navisensCoreIsReady = true;
-          console.log("onRuntimeInitialized");
-        },
-        print: (function() {
-          var element = document.getElementById('output');
-          if (element) element.value = ''; // clear browser cache
-          return function(text) {
-            if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
-            console.log(text);
-            if (element) {
-              element.value += text + "\n";
-              element.scrollTop = element.scrollHeight; // focus on bottom
+        function updateBounds(x, y) {
+            if (max_x === undefined || max_x < x) {
+                max_x = x
             }
-          };
-        })(),
-        printErr: function(text) {
-          if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
-          if (0) { // XXX disabled for safety typeof dump == 'function') {
-            dump(text + '\n'); // fast, straight to the real console
-          } else {
-            console.error(text);
-          }
-        },
-        canvas: (function() {
-          var canvas = document.getElementById('canvas');
-
-          // As a default initial behavior, pop up an alert when webgl context is lost. To make your
-          // application robust, you may want to override this behavior before shipping!
-          // See http://www.khronos.org/registry/webgl/specs/latest/1.0/#5.15.2
-          canvas.addEventListener("webglcontextlost", function(e) { alert('WebGL context lost. You will need to reload the page.'); e.preventDefault(); }, false);
-
-          return canvas;
-        })(),
-        setStatus: function(text) {
-          if (!Module.setStatus.last) Module.setStatus.last = { time: Date.now(), text: '' };
-          if (text === Module.setStatus.text) return;
-          var m = text.match(/([^(]+)\((\d+(\.\d+)?)\/(\d+)\)/);
-          var now = Date.now();
-          if (m && now - Date.now() < 30) return; // if this is a progress update, skip it if too soon
-          if (m) {
-            text = m[1];
-            progressElement.value = parseInt(m[2])*100;
-            progressElement.max = parseInt(m[4])*100;
-            progressElement.hidden = false;
-            spinnerElement.hidden = false;
-          } else {
-            progressElement.value = null;
-            progressElement.max = null;
-            progressElement.hidden = true;
-            if (!text) spinnerElement.hidden = true;
-          }
-          statusElement.innerHTML = text;
-        },
-        totalDependencies: 0,
-        monitorRunDependencies: function(left) {
-          this.totalDependencies = Math.max(this.totalDependencies, left);
-          Module.setStatus(left ? 'Preparing Core... (' + (this.totalDependencies-left) + '/' + this.totalDependencies + ')' : 'All downloads complete.');
+            if (min_x === undefined || min_x > x) {
+                min_x = x
+            }
+            if (max_y === undefined || max_y < y) {
+                max_y = y
+            }
+            if (min_y === undefined || min_y > y) {
+                min_y = y
+            }
+            max_axis = max_x > max_y ? max_x : max_y
+            min_axis = min_x < min_y ? min_x : min_y
         }
-      };
-      Module.setStatus('Downloading Core Module...');
-      window.onerror = function() {
-        Module.setStatus('Exception thrown, see JavaScript console');
-        spinnerElement.style.display = 'none';
-        Module.setStatus = function(text) {
-          if (text) Module.printErr('[post-exception status] ' + text);
-        };
-      };
-//////////////////////////////////////////
-let db;
-    function uploadLog() {
-      let request = indexedDB.open('emscripten_filesystem');
 
-      request.onerror = function (e) {
-        console.error('Unable to open database.');
-      }
+        function updateCartesian(data_points) {
+            // console.log("data_points: " + data_points.length)
+            svg.selectAll("g").remove();
 
-      request.onsuccess = function (e) {
-        db = e.target.result;
-        console.log('db opened');
+            // Add X axis
+            var x_axis = d3.scaleLinear()
+                .domain([min_axis, max_axis])
+                .range([0, width]);
+            svg.append("g")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(x_axis));
 
-        // 	db.createObjectStore('cachedForms', {keyPath:'id', autoIncrement: true});
-        // 	dbReady = true;
-        let trans = db.transaction(['FILES'], 'readonly');
+            // Add Y axis
+            var y_axis = d3.scaleLinear()
+                .domain([min_axis, max_axis])
+                .range([height, 0]);
+            svg.append("g")
+                .call(d3.axisLeft(y_axis));
 
-        let req = trans.objectStore('FILES').get(document.getElementById("logFileName").value);
-        req.onsuccess = function (e) {
-          let record = e.target.result;
-          console.log('get success', record);
 
-          var formData = new FormData();
-          var fileBlob = new Blob([record], { type: 'application/octet-stream' });
-          formData.append("uploadfile", fileBlob, document.getElementById("logFileName").value);
+            // Add dots
+            svg.append('g')
+                .selectAll("dot")
+                .data(data_points)
+                .enter()
+                .append("circle")
+                .attr("cx", function(d) {
+                    return x_axis(d.x_axis);
+                })
+                .attr("cy", function(d) {
+                    return y_axis(d.y_axis);
+                })
+                .attr("r", 1.5)
+                .style("fill", "#CC545C")
+        }
 
-          var req = new XMLHttpRequest();
+        function reportError(errCode, errDesc) {
+            if (errCode != 0) {
+                alert(errDesc);
+            }
+        }
 
-          req.open("POST", "/upload");
-          //-
-          //---req.upload.addEventListener("progress", updateProgress);
-          req.addEventListener("load", transferComplete);
-          req.addEventListener("error", transferFailed);
-          req.addEventListener("abort", transferCanceled);
-          //-
-          req.upload.onprogress = function (progressEvent) {
-            if (progressEvent.lengthComputable) {
-            var percentComplete =  Math.round(progressEvent.loaded / progressEvent.total * 100);
-            document.getElementById("logFileUploadProgress").innerText = percentComplete + "%";
+        var last_location
+
+        function receive(x, y, h, t, motion) {
+
+            document.getElementById("estPosX").innerHTML = x.toFixed(5);
+            document.getElementById("estPosY").innerHTML = y.toFixed(5);
+            document.getElementById("estPosH").innerHTML = h.toFixed(5);
+            document.getElementById("estPosT").innerHTML = t.toFixed(5);
+            document.getElementById("estPosM").innerHTML = motion;
+
+            updateBounds(x, y)
+            var location = new Object();
+            location.x_axis = x;
+            location.y_axis = y;
+
+
+            if (last_location != undefined) {
+                var x_diff = Math.abs(x - last_location.x_axis);
+                var y_diff = Math.abs(y - last_location.y_axis);
+                // console.log("x_diff: " + x_diff + " y_diff: " + y_diff)
+                if (y_diff > 0.15 || x_diff > 0.15) {
+                    data.push(location)
+                    updateCartesian(data)
+                    last_location = location
+                }
             } else {
-              // Unable to compute progress information since the total size is unknown
-              document.getElementById("logFileUploadProgress").innerText = "unknown %";
+                data.push(location)
+                updateCartesian(data)
+                last_location = location
             }
-          };
-
-          req.onload = function (event) { /*alert(event.target.responseText);*/ };
-          req.send(formData);
 
         }
-      }
 
-    }
+        var Module = {
+            preRun: [],
+            postRun: [],
+            onRuntimeInitialized: function() {
+                navisensCoreIsReady = true;
+                console.log("onRuntimeInitialized");
+            },
+            print: (function() {
+                var element = document.getElementById('output');
+                if (element) element.value = ''; // clear browser cache
+                return function(text) {
+                    if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
+                    console.log(text);
+                    if (element) {
+                        element.value += text + "\n";
+                        element.scrollTop = element.scrollHeight; // focus on bottom
+                    }
+                };
+            })(),
+            printErr: function(text) {
+                if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
+                if (0) { // XXX disabled for safety typeof dump == 'function') {
+                    dump(text + '\n'); // fast, straight to the real console
+                } else {
+                    console.error(text);
+                }
+            },
+            canvas: (function() {
+                var canvas = document.getElementById('canvas');
 
-    //
-    function updateProgress(oEvent) {
-      if (oEvent.lengthComputable) {
-        var percentComplete = oEvent.loaded / oEvent.total * 100;
-        document.getElementById("logFileUploadProgress").innerText = percentComplete + " %";
-      } else {
-        // Unable to compute progress information since the total size is unknown
-        document.getElementById("logFileUploadProgress").innerText = "unknown %";
-      }
-    }
+                // As a default initial behavior, pop up an alert when webgl context is lost. To make your
+                // application robust, you may want to override this behavior before shipping!
+                // See http://www.khronos.org/registry/webgl/specs/latest/1.0/#5.15.2
+                canvas.addEventListener("webglcontextlost", function(e) {
+                    alert('WebGL context lost. You will need to reload the page.');
+                    e.preventDefault();
+                }, false);
 
-    function transferComplete(evt) {
-      alert("The transfer is complete.");
-    }
+                return canvas;
+            })(),
+            setStatus: function(text) {
+                if (!Module.setStatus.last) Module.setStatus.last = {
+                    time: Date.now(),
+                    text: ''
+                };
+                if (text === Module.setStatus.text) return;
+                var m = text.match(/([^(]+)\((\d+(\.\d+)?)\/(\d+)\)/);
+                var now = Date.now();
+                if (m && now - Date.now() < 30) return; // if this is a progress update, skip it if too soon
+                if (m) {
+                    text = m[1];
+                    progressElement.value = parseInt(m[2]) * 100;
+                    progressElement.max = parseInt(m[4]) * 100;
+                    progressElement.hidden = false;
+                    spinnerElement.hidden = false;
+                } else {
+                    progressElement.value = null;
+                    progressElement.max = null;
+                    progressElement.hidden = true;
+                    if (!text) spinnerElement.hidden = true;
+                }
+                statusElement.innerHTML = text;
+            },
+            totalDependencies: 0,
+            monitorRunDependencies: function(left) {
+                this.totalDependencies = Math.max(this.totalDependencies, left);
+                Module.setStatus(left ? 'Preparing Core... (' + (this.totalDependencies - left) + '/' + this.totalDependencies + ')' : 'All downloads complete.');
+            }
+        };
+        Module.setStatus('Downloading Core Module...');
+        window.onerror = function() {
+            Module.setStatus('Exception thrown, see JavaScript console');
+            spinnerElement.style.display = 'none';
+            Module.setStatus = function(text) {
+                if (text) Module.printErr('[post-exception status] ' + text);
+            };
+        };
+        let db;
 
-    function transferFailed(evt) {
-      alert("An error occurred while transferring the file.");
-    }
+        function uploadLog() {
+            let request = indexedDB.open('emscripten_filesystem');
 
-    function transferCanceled(evt) {
-      alert("The transfer has been canceled by the user.");
-    }
+            request.onerror = function(e) {
+                console.error('Unable to open database.');
+            }
+
+            request.onsuccess = function(e) {
+                db = e.target.result;
+                console.log('db opened');
+
+                // 	db.createObjectStore('cachedForms', {keyPath:'id', autoIncrement: true});
+                // 	dbReady = true;
+                let trans = db.transaction(['FILES'], 'readonly');
+
+                let req = trans.objectStore('FILES').get(document.getElementById("logFileName").value);
+                req.onsuccess = function(e) {
+                    let record = e.target.result;
+                    console.log('get success', record);
+
+                    var formData = new FormData();
+                    var fileBlob = new Blob([record], {
+                        type: 'application/octet-stream'
+                    });
+                    formData.append("uploadfile", fileBlob, document.getElementById("logFileName").value);
+
+                    var req = new XMLHttpRequest();
+
+                    req.open("POST", "/upload");
+                    //-
+                    //---req.upload.addEventListener("progress", updateProgress);
+                    req.addEventListener("load", transferComplete);
+                    req.addEventListener("error", transferFailed);
+                    req.addEventListener("abort", transferCanceled);
+                    //-
+                    req.upload.onprogress = function(progressEvent) {
+                        if (progressEvent.lengthComputable) {
+                            var percentComplete = Math.round(progressEvent.loaded / progressEvent.total * 100);
+                            document.getElementById("logFileUploadProgress").innerText = percentComplete + "%";
+                        } else {
+                            // Unable to compute progress information since the total size is unknown
+                            document.getElementById("logFileUploadProgress").innerText = "unknown %";
+                        }
+                    };
+
+                    req.onload = function(event) { /*alert(event.target.responseText);*/ };
+                    req.send(formData);
+
+                }
+            }
+
+        }
+
+        //
+        function updateProgress(oEvent) {
+            if (oEvent.lengthComputable) {
+                var percentComplete = oEvent.loaded / oEvent.total * 100;
+                document.getElementById("logFileUploadProgress").innerText = percentComplete + " %";
+            } else {
+                // Unable to compute progress information since the total size is unknown
+                document.getElementById("logFileUploadProgress").innerText = "unknown %";
+            }
+        }
+
+        function transferComplete(evt) {
+            alert("The transfer is complete.");
+        }
+
+        function transferFailed(evt) {
+            alert("An error occurred while transferring the file.");
+        }
+
+        function transferCanceled(evt) {
+            alert("The transfer has been canceled by the user.");
+        }
     </script>
     <div class="container-fluid">
-      <div class="container-fluid">
+        <div class="container-fluid">
 
-        <button type="button" class="btn btn-success btn-lg" id="startcore">Start</button>
-        <button type="button" class="btn btn-danger btn-lg" id="stopcore">Stop</button>
-      </div>
-    <script type='text/javascript'>
-      document.getElementById('stopcore').addEventListener('click', function(){
-        var result = Module['stop'](); // arguments
-        document.getElementById("recordData").disabled = false;
-        document.getElementById("uploadLogFileButton").disabled = false;
-        document.getElementById("recordDataText").classList.remove("text-danger");
+            <button type="button" class="btn btn-success btn-lg" id="startcore">Start</button>
+            <button type="button" class="btn btn-danger btn-lg" id="stopcore">Stop</button>
+        </div>
+        <script type='text/javascript'>
+            document.getElementById('stopcore').addEventListener('click', function() {
+                var result = Module['stop'](); // arguments
+                document.getElementById("recordData").disabled = false;
+                document.getElementById("uploadLogFileButton").disabled = false;
+                document.getElementById("recordDataText").classList.remove("text-danger");
 
-        document.getElementById("enableEstimation").disabled = false;
-        document.getElementById("enableEstimationText").classList.remove("text-danger");
-      });
+                document.getElementById("enableEstimation").disabled = false;
+                document.getElementById("enableEstimationText").classList.remove("text-danger");
+            });
 
 
-    document.getElementById('startcore').addEventListener('click', function(){
-      if(navisensCoreIsReady){
-        console.log("about to show demo intro")
-        if (!DeviceMotionEvent) {
-          console.log("DEVICE MOTION EVENT DOESNT EXIST")
-          return;
-        }
-        if (typeof DeviceMotionEvent.requestPermission === 'function') {
-          // iOS 13+
-          console.log("REQUESTING PERMISSIONS (or trying too)")
-          DeviceMotionEvent.requestPermission()
-          .then(response => {
-            if (response == 'granted') {
-              // window.addEventListener('devicemotion', (e) => {
-              //   // do something with e
-              // })
-              console.log("Request for Device Motion was granted")
-              document.getElementById("recordData").disabled = true;
-              document.getElementById("uploadLogFileButton").disabled = true;
-              document.getElementById("recordDataText").classList.add("text-danger");
+            document.getElementById('startcore').addEventListener('click', function() {
+                if (navisensCoreIsReady) {
+                    console.log("about to show demo intro")
+                    if (!DeviceMotionEvent) {
+                        console.log("DEVICE MOTION EVENT DOESNT EXIST")
+                        return;
+                    }
+                    if (typeof DeviceMotionEvent.requestPermission === 'function') {
+                        // iOS 13+
+                        console.log("REQUESTING PERMISSIONS (or trying too)")
+                        DeviceMotionEvent.requestPermission()
+                            .then(response => {
+                                if (response == 'granted') {
+                                    // window.addEventListener('devicemotion', (e) => {
+                                    //   // do something with e
+                                    // })
+                                    console.log("Request for Device Motion was granted")
+                                    document.getElementById("recordData").disabled = true;
+                                    document.getElementById("uploadLogFileButton").disabled = true;
+                                    document.getElementById("recordDataText").classList.add("text-danger");
 
-              document.getElementById("enableEstimation").disabled = true;
-              document.getElementById("enableEstimationText").classList.add("text-danger");
-              Module.start() // start core with no verification
-              DeviceOrientationEvent.requestPermission()
-                .then(response => {
-                  if (response == 'granted') {
-                    console.log("Request for Device Orientation was granted")
-                    // window.addEventListener('deviceorientation', (e) => {
-                    //   // do something with e
-                    //   vm.$refs.modalHeyThere.close(true);
-                    //   vm.$refs.modalIntroDemo.open();
-                    // })
+                                    document.getElementById("enableEstimation").disabled = true;
+                                    document.getElementById("enableEstimationText").classList.add("text-danger");
+                                    Module.start() // start core with no verification
+                                    DeviceOrientationEvent.requestPermission()
+                                        .then(response => {
+                                            if (response == 'granted') {
+                                                console.log("Request for Device Orientation was granted")
+                                                    // window.addEventListener('deviceorientation', (e) => {
+                                                    //   // do something with e
+                                                    //   vm.$refs.modalHeyThere.close(true);
+                                                    //   vm.$refs.modalIntroDemo.open();
+                                                    // })
 
-                  } else {
-                    console.log("Request for Device Orientation was denied")
-                  }
-                })
-                .catch(console.error)
-              } else {
-                console.log("Request for Device Motion was denied")
-              }
-          })
-          .catch(console.error)
+                                            } else {
+                                                console.log("Request for Device Orientation was denied")
+                                            }
+                                        })
+                                        .catch(console.error)
+                                } else {
+                                    console.log("Request for Device Motion was denied")
+                                }
+                            })
+                            .catch(console.error)
 
-        } else {
-          console.log("DeviceMotionEvent.requestPermission does not exist. Starting without")
-          Module.start() // start core with no verification
+                    } else {
+                        console.log("DeviceMotionEvent.requestPermission does not exist. Starting without")
+                        Module.start() // start core with no verification
 
-        }
+                    }
 
-      }else{
-        alert("navisenscore is not ready yet.")
-      }
-    });
-    </script>
-    <script async type="text/javascript" src="webcore.js"></script>
-    <br/>
-    <div id="carouselExampleIndicators" style="height: 230px;" class="carousel slide" data-ride="carousel">
-      <ol class="carousel-indicators">
-        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-      </ol>
-      <div class="carousel-inner">
-    <div class="container h-100 carousel-item active">
-      <div class="container">
+                } else {
+                    alert("navisenscore is not ready yet.")
+                }
+            });
+        </script>
+        <script async type="text/javascript" src="webcore.js"></script>
+        <br/>
 
-      <div class="row"><div class="col-lg text-center"> <h3>Estimation</h3></div></div>
-      <div class="row">
-      <table class="table table-striped">
-        <tr><td> X </td><td id="estPosX"></td></tr>
-        <tr><td> Y </td><td id="estPosY"></td></tr>
-        <tr><td> Height </td><td id="estPosH"></td></tr>
-        <tr><td> Time </td><td id="estPosT"></td></tr>
-        <tr><td> Motion </td><td id="estPosM"></td></tr>
-      </table>
-    </div>
-  </div>
-</div>
-    <div class="container h-100 carousel-item">
-      <div class="container">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg text-center">
+                    <h3>Estimation</h3>
+                </div>
+            </div>
+            <div class="row">
+                <table class="table table-striped">
+                    <tr>
+                        <td> X </td>
+                        <td id="estPosX"></td>
+                    </tr>
+                    <tr>
+                        <td> Y </td>
+                        <td id="estPosY"></td>
+                    </tr>
+                    <tr>
+                        <td> Height </td>
+                        <td id="estPosH"></td>
+                    </tr>
+                    <tr>
+                        <td> Time </td>
+                        <td id="estPosT"></td>
+                    </tr>
+                    <tr>
+                        <td> Motion </td>
+                        <td id="estPosM"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
 
-      <div class="row"><div class="col-lg text-center"> <h3>Rotational Velocity</h3></div></div>
-      <div class="row">
-        <table class="table table-striped">
-        <tr><td> Roll </td><td id="gyroRoll"></td></tr>
-        <tr><td> Pitch </td><td id="gyroPitch"></td></tr>
-        <tr><td> Yaw </td><td id="gyroYaw"></td></tr>
-    </table>
-  </div>
-</div>
-</div>
-<div class="container h-100 carousel-item">
-      <div class="container">
-
-      <div class="row"><div class="col-lg text-center"> <h3>Acceleration</h3></div></div>
-      <div class="row">
-        <table class="table table-striped">
-          <tr><td> X </td><td id="accX"></td></tr>
-            <tr><td> Y </td><td id="accY"></td></tr>
-              <tr><td> Z </td><td id="accZ"></td></tr>
-    </table>
-  </div>
-</div>
-</div>
-    <div class="container h-100 carousel-item">
-      <div class="container">
-      <div class="row"><div class="col-lg text-center"> <h3>IMU Timing</h3></div></div>
-      <div class="row">
-        <table class="table table-striped">
-          <tr><td> Time </td><td id="ts"></td></tr>
-            <tr><td> Delta </td><td id="dt"></td></tr>
-              <tr><td> Max Delta </td><td id="maxDt"></td></tr>
-    </table>
-  </div>
-</div>
-</div>
-</div>
-  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-    <span class="carousel-control-prev-icon bg-secondary" aria-hidden="true"></span>
-    <span class="sr-only">Previous</span>
-  </a>
-  <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-    <span class="carousel-control-next-icon bg-secondary" aria-hidden="true"></span>
-    <span class="sr-only">Next</span>
-  </a>
-    </div>
         <br/>
         <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="" name="enableEstimation" id="enableEstimation" checked>
-          <label class="form-check-label" for="enableEstimation" id="enableEstimationText">
+            <input class="form-check-input" type="checkbox" value="" name="enableEstimation" id="enableEstimation" checked>
+            <label class="form-check-label" for="enableEstimation" id="enableEstimationText">
             Enable Estimation
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="" name="recordData" id="recordData" >
-          <label class="form-check-label" for="recordData" id="recordDataText">
+            <input class="form-check-input" type="checkbox" value="" name="recordData" id="recordData">
+            <label class="form-check-label" for="recordData" id="recordDataText">
             Record Data
           </label>
         </div>
 
         <div class="input-group mb-3">
-          <button class="btn btn-outline-secondary" type="button" id="uploadLogFileButton" onclick="uploadLog()" disabled>Upload Log</button>
-          <input type="text" class="form-control" placeholder="" aria-label="Log File Name" id="logFileName" aria-describedby="uploadLogFileButton" disabled>
+            <button class="btn btn-outline-secondary" type="button" id="uploadLogFileButton" onclick="uploadLog()" disabled>Upload Log</button>
+            <input type="text" class="form-control" placeholder="" aria-label="Log File Name" id="logFileName" aria-describedby="uploadLogFileButton" disabled>
         </div>
-  </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
-  </body>
+</body>
+
 </html>
 

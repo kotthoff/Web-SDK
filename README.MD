@@ -1,9 +1,13 @@
 # Navisens Web SDK
-Webassembly module for local intertial estimation in web browser
+WebAssembly module for local intertial estimation in web browser.
+
+**The Navisens Web SDK is currently in private beta. You agree not to publish an app or publicize any code without written approval by Navisens.**
+
+**By cloning this repository and integrating this code, you agree to our [Privacy Policy](https://www.navisens.com/privacy/) and [Terms of Service](https://www.navisens.com/terms/)**
 
 -----
 ## What it does
-The sample website webcore.html demonstrates usage of the navisens motionDNA webassembly module to estimate your location in cartestian space. The DeviceMotion web api is used to capture accelerometer and gyroscope sensor data from the mobile device that is running the demo.
+The sample website webcore.html demonstrates usage of the Navisens motionDNA WebAssembly module to estimate your location in cartestian space. The DeviceMotion web API is used to capture accelerometer and gyroscope sensor data from the mobile device that is running the demo.
 
 ## Getting Started
 
@@ -50,7 +54,7 @@ On iOS devices, sensor collection appears to pause during a touch event and duri
 
 ## Troubleshooting
 
-#### DevieMotion api does not appear to exist.
+#### DevieMotion API does not appear to exist.
 Make sure you are serving the site up in a secure HTTPS context.
 
 #### The Module does not load
@@ -60,4 +64,4 @@ This may be from trying to run the web site from running the html file directly 
 Reach out to the email(s) listed below if you are still experiencing issues
 
 ## Support
-Contact Support@navisens.com for any additinal problems you may be having with this early release
+Contact support@navisens.com for any additinal problems you may be having with this early release

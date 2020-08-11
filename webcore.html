@@ -336,79 +336,6 @@
             };
         };
         let db;
-
-        function uploadLog() {
-            let request = indexedDB.open('emscripten_filesystem');
-
-            request.onerror = function(e) {
-                console.error('Unable to open database.');
-            }
-
-            request.onsuccess = function(e) {
-                db = e.target.result;
-                console.log('db opened');
-
-                let trans = db.transaction(['FILES'], 'readonly');
-
-                let req = trans.objectStore('FILES').get(document.getElementById("logFileName").value);
-                req.onsuccess = function(e) {
-                    let record = e.target.result;
-                    console.log('get success', record);
-
-                    var formData = new FormData();
-                    var fileBlob = new Blob([record], {
-                        type: 'application/octet-stream'
-                    });
-                    formData.append("uploadfile", fileBlob, document.getElementById("logFileName").value);
-
-                    var req = new XMLHttpRequest();
-
-                    req.open("POST", "/upload");
-                    //-
-                    //---req.upload.addEventListener("progress", updateProgress);
-                    req.addEventListener("load", transferComplete);
-                    req.addEventListener("error", transferFailed);
-                    req.addEventListener("abort", transferCanceled);
-                    //-
-                    req.upload.onprogress = function(progressEvent) {
-                        if (progressEvent.lengthComputable) {
-                            var percentComplete = Math.round(progressEvent.loaded / progressEvent.total * 100);
-                            document.getElementById("logFileUploadProgress").innerText = percentComplete + "%";
-                        } else {
-                            // Unable to compute progress information since the total size is unknown
-                            document.getElementById("logFileUploadProgress").innerText = "unknown %";
-                        }
-                    };
-
-                    req.onload = function(event) { /*alert(event.target.responseText);*/ };
-                    req.send(formData);
-
-                }
-            }
-
-        }
-
-        function updateProgress(oEvent) {
-            if (oEvent.lengthComputable) {
-                var percentComplete = oEvent.loaded / oEvent.total * 100;
-                document.getElementById("logFileUploadProgress").innerText = percentComplete + " %";
-            } else {
-                // Unable to compute progress information since the total size is unknown
-                document.getElementById("logFileUploadProgress").innerText = "unknown %";
-            }
-        }
-
-        function transferComplete(evt) {
-            alert("The transfer is complete.");
-        }
-
-        function transferFailed(evt) {
-            alert("An error occurred while transferring the file.");
-        }
-
-        function transferCanceled(evt) {
-            alert("The transfer has been canceled by the user.");
-        }
     </script>
     <div class="container-fluid">
         <div class="container-fluid">
@@ -419,9 +346,6 @@
         <script type='text/javascript'>
             document.getElementById('stopcore').addEventListener('click', function() {
                 var result = Module['stop'](); // arguments
-                document.getElementById("recordData").disabled = false;
-                document.getElementById("uploadLogFileButton").disabled = false;
-                document.getElementById("recordDataText").classList.remove("text-danger");
             });
 
 
@@ -439,9 +363,6 @@
                             .then(response => {
                                 if (response == 'granted') {
                                     console.log("Request for Device Motion was granted")
-                                    document.getElementById("recordData").disabled = true;
-                                    document.getElementById("uploadLogFileButton").disabled = true;
-                                    document.getElementById("recordDataText").classList.add("text-danger");
                                     Module.start() // start core
                                 } else {
                                     console.log("Request for Device Motion was denied")
@@ -496,17 +417,6 @@
         </div>
 
         <br/>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" name="recordData" id="recordData">
-            <label class="form-check-label" for="recordData" id="recordDataText">
-            Record Data
-          </label>
-        </div>
-
-        <div class="input-group mb-3">
-            <button class="btn btn-outline-secondary" type="button" id="uploadLogFileButton" onclick="uploadLog()" disabled>Upload Log</button>
-            <input type="text" class="form-control" placeholder="" aria-label="Log File Name" id="logFileName" aria-describedby="uploadLogFileButton" disabled>
-        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>

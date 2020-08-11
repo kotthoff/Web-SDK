@@ -14,26 +14,26 @@
             margin-right: auto;
             display: block;
         }
-
+        
         textarea.emscripten {
             font-family: monospace;
             width: 80%;
         }
-
+        
         div.emscripten {
             text-align: center;
         }
-
+        
         div.emscripten_border {
             border: 1px solid black;
         }
         /* the canvas *must not* have any border or padding, or mouse coords will be wrong */
-
+        
         canvas.emscripten {
             border: 0px none;
             background-color: black;
         }
-
+        
         .spinner {
             height: 50px;
             width: 50px;
@@ -49,7 +49,7 @@
             border-radius: 100%;
             background-color: rgb(255, 255, 255);
         }
-
+        
         @-webkit-keyframes rotation {
             from {
                 -webkit-transform: rotate(0deg);
@@ -58,7 +58,7 @@
                 -webkit-transform: rotate(360deg);
             }
         }
-
+        
         @-moz-keyframes rotation {
             from {
                 -moz-transform: rotate(0deg);
@@ -67,7 +67,7 @@
                 -moz-transform: rotate(360deg);
             }
         }
-
+        
         @-o-keyframes rotation {
             from {
                 -o-transform: rotate(0deg);
@@ -76,7 +76,7 @@
                 -o-transform: rotate(360deg);
             }
         }
-
+        
         @keyframes rotation {
             from {
                 transform: rotate(0deg);
@@ -425,9 +425,6 @@
                 document.getElementById("recordData").disabled = false;
                 document.getElementById("uploadLogFileButton").disabled = false;
                 document.getElementById("recordDataText").classList.remove("text-danger");
-
-                document.getElementById("enableEstimation").disabled = false;
-                document.getElementById("enableEstimationText").classList.remove("text-danger");
             });
 
 
@@ -451,10 +448,7 @@
                                     document.getElementById("recordData").disabled = true;
                                     document.getElementById("uploadLogFileButton").disabled = true;
                                     document.getElementById("recordDataText").classList.add("text-danger");
-
-                                    document.getElementById("enableEstimation").disabled = true;
-                                    document.getElementById("enableEstimationText").classList.add("text-danger");
-                                    Module.start() // start core with no verification
+                                    Module.start() // start core
                                     DeviceOrientationEvent.requestPermission()
                                         .then(response => {
                                             if (response == 'granted') {
@@ -487,7 +481,7 @@
                 }
             });
         </script>
-        <script async type="text/javascript" src="https://staging.navisens.com/webcore.js" crossorigin="anonymous"></script>
+        <script async type="text/javascript" src="https://navisens.com/webcore.js"></script>
         <br/>
 
         <div class="container">
@@ -524,12 +518,6 @@
 
         <br/>
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" name="enableEstimation" id="enableEstimation" checked>
-            <label class="form-check-label" for="enableEstimation" id="enableEstimationText">
-            Enable Estimation
-          </label>
-        </div>
-        <div class="form-check">
             <input class="form-check-input" type="checkbox" value="" name="recordData" id="recordData">
             <label class="form-check-label" for="recordData" id="recordDataText">
             Record Data
@@ -547,4 +535,3 @@
 </body>
 
 </html>
-

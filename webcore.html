@@ -348,8 +348,6 @@
                 db = e.target.result;
                 console.log('db opened');
 
-                // 	db.createObjectStore('cachedForms', {keyPath:'id', autoIncrement: true});
-                // 	dbReady = true;
                 let trans = db.transaction(['FILES'], 'readonly');
 
                 let req = trans.objectStore('FILES').get(document.getElementById("logFileName").value);
@@ -390,7 +388,6 @@
 
         }
 
-        //
         function updateProgress(oEvent) {
             if (oEvent.lengthComputable) {
                 var percentComplete = oEvent.loaded / oEvent.total * 100;
@@ -441,29 +438,11 @@
                         DeviceMotionEvent.requestPermission()
                             .then(response => {
                                 if (response == 'granted') {
-                                    // window.addEventListener('devicemotion', (e) => {
-                                    //   // do something with e
-                                    // })
                                     console.log("Request for Device Motion was granted")
                                     document.getElementById("recordData").disabled = true;
                                     document.getElementById("uploadLogFileButton").disabled = true;
                                     document.getElementById("recordDataText").classList.add("text-danger");
                                     Module.start() // start core
-                                    DeviceOrientationEvent.requestPermission()
-                                        .then(response => {
-                                            if (response == 'granted') {
-                                                console.log("Request for Device Orientation was granted")
-                                                    // window.addEventListener('deviceorientation', (e) => {
-                                                    //   // do something with e
-                                                    //   vm.$refs.modalHeyThere.close(true);
-                                                    //   vm.$refs.modalIntroDemo.open();
-                                                    // })
-
-                                            } else {
-                                                console.log("Request for Device Orientation was denied")
-                                            }
-                                        })
-                                        .catch(console.error)
                                 } else {
                                     console.log("Request for Device Motion was denied")
                                 }

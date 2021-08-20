@@ -41,7 +41,7 @@ This call will end the estimation and stop processing sensor data.
 
 3 callback methods must be impemented in the javascript layer in order for the SDK to function properly
 
-`receive(x,y,height,timestamp,motion)`
+`receive(x,y,heading,timestamp,motion)`
 
 This is the primary callback and is where the estimation of the users position is passed back to the hmtl and javascript layers. The method also is handed the currently predictedmotion for the user, which is usual one of three possible motions... stationary, fidgeting, and forward.
 
